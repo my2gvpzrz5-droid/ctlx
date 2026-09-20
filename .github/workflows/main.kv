@@ -1,0 +1,228 @@
+<Spinner@Spinner>:
+    font_name: "DroidSans"
+    font_size:16
+
+<AddPage>:
+    BoxLayout:
+        orientation:"vertical"
+        padding:12
+        spacing:8
+        # 学段+学科行
+        BoxLayout:
+            size_hint_y: None
+            height:48
+            Label:
+                text:"学段"
+                size_hint_x:0.12
+                font_name:"DroidSans"
+            Spinner:
+                id:sp_grade
+                text:"小学"
+                values:["小学","初中","高中"]
+                on_text: root.update_subject_list(self.text)
+            Label:
+                text:"学科"
+                size_hint_x:0.12
+                font_name:"DroidSans"
+            Spinner:
+                id:sp_subj
+                text:"数学"
+                values:["语文","数学","英语"]
+        # 知识点
+        BoxLayout:
+            size_hint_y: None
+            height:48
+            Label:
+                text:"知识点"
+                size_hint_x:0.12
+                font_name:"DroidSans"
+            TextInput:
+                id:in_know
+                hint_text: "如 分数加减法 一元一次方程"
+                font_name:"DroidSans"
+        # 题目
+        BoxLayout:
+            size_hint_y: None
+            height:70
+            Label:
+                text:"题目"
+                size_hint_x:0.12
+                font_name:"DroidSans"
+            TextInput:
+                id:in_q
+                multiline:True
+                hint_text:"粘贴题干"
+                font_name:"DroidSans"
+        # 答案
+        BoxLayout:
+            size_hint_y: None
+            height:60
+            Label:
+                text:"答案"
+                size_hint_x:0.12
+                font_name:"DroidSans"
+            TextInput:
+                id:in_ans
+                multiline:True
+                font_name:"DroidSans"
+        # 错因
+        BoxLayout:
+            size_hint_y: None
+            height:60
+            Label:
+                text:"错因"
+                size_hint_x:0.12
+                font_name:"DroidSans"
+            TextInput:
+                id:in_wrong
+                multiline:True
+                hint_text:"写错误原因"
+                font_name:"DroidSans"
+        Button:
+            text:"保存错题，AI生成难点讲解+举一反三"
+            size_hint_y: None
+            height:48
+            on_press:root.on_save_question()
+            font_name:"DroidSans"
+        Label:
+            id:msg
+            size_hint_y: None
+            height:32
+            color:0,1,0.7,1
+            font_name:"DroidSans"
+        # 两个滚动文本区域（水平布局）
+        BoxLayout:
+            size_hint_y: None
+            height:180
+            spacing:4
+            ScrollView:
+                Label:
+                    id:out_diff
+                    size_hint_y:None
+                    size_hint_x:None
+                    width:self.parent.width
+                    height:self.texture_size[1]
+                    text:"【难点AI讲解】"
+                    font_size:13
+                    font_name:"DroidSans"
+            ScrollView:
+                Label:
+                    id:out_ext
+                    size_hint_y:None
+                    size_hint_x:None
+                    width:self.parent.width
+                    height:self.texture_size[1]
+                    text:"【举一反三变式题】"
+                    font_size:13
+                    font_name:"DroidSans"
+        BoxLayout:
+            size_hint_y: None
+            height:48
+            Button:
+                text:"查看全部错题"
+                on_press:app.root.current="view"
+                font_name:"DroidSans"
+            Button:
+                text:"薄弱点练习"
+                on_press:app.root.current="weak"
+                font_name:"DroidSans"
+
+<WeakScreen>:
+    BoxLayout:
+        orientation:"vertical"
+        padding:12
+        spacing:8
+        BoxLayout:
+            size_hint_y: None
+            height:48
+            Label:
+                text:"学段"
+                font_name:"DroidSans"
+            Spinner:
+                id:sp_grade
+                text:"小学"
+                values:["小学","初中","高中"]
+                on_text: root.update_subject_list(self.text)
+            Label:
+                text:"学科"
+                font_name:"DroidSans"
+            Spinner:
+                id:sp_subj
+                text:"数学"
+                values:["语文","数学","英语"]
+        Button:
+            text:"加载薄弱知识点排行"
+            size_hint_y: None
+            height:48
+            on_press:root.load_weak_list()
+            font_name:"DroidSans"
+        Label:
+            id:label_weak
+            size_hint_y: None
+            height:60
+            font_name:"DroidSans"
+        BoxLayout:
+            size_hint_y: None
+            height:48
+            Label:
+                text:"知识点:"
+                font_name:"DroidSans"
+            TextInput:
+                id:in_know
+                hint_text:"输入知识点名称"
+                font_name:"DroidSans"
+        BoxLayout:
+            size_hint_y: None
+            height:48
+            Button:
+                text:"复习该知识点旧错题"
+                on_press:root.review_knowledge()
+                font_name:"DroidSans"
+            Button:
+                text:"AI生成新练习题"
+                on_press:root.create_new_practice()
+                font_name:"DroidSans"
+        ScrollView:
+            size_hint_y:1
+            Label:
+                id:out_practice
+                size_hint_y:None
+                size_hint_x:None
+                width:self.parent.width
+                height:self.texture_size[1]
+                font_size:13
+                font_name:"DroidSans"
+        Button:
+            text:"返回添加错题"
+            size_hint_y: None
+            height:48
+            on_press:app.root.current="add"
+            font_name:"DroidSans"
+
+<ViewScreen>:
+    BoxLayout:
+        orientation:"vertical"
+        padding:12
+        spacing:8
+        Button:
+            text:"加载全部错题"
+            size_hint_y: None
+            height:48
+            on_press:root.load_all()
+            font_name:"DroidSans"
+        ScrollView:
+            size_hint_y:1
+            Label:
+                id:label_all
+                size_hint_y:None
+                size_hint_x:None
+                width:self.parent.width
+                height:self.texture_size[1]
+                font_size:12
+                font_name:"DroidSans"
+        Button:
+            text:"返回添加错题"
+            size_hint_y: None
+            height:48
+            on_press:app.root.current="add"
+            font_name:"DroidSans"
